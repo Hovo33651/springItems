@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,4 +26,6 @@ public class Employee {
     private String position;
     @ManyToOne(fetch = FetchType.EAGER)
     private Company company;
+    @OneToMany(mappedBy = "employee")
+    private List<Picture> pictures;
 }

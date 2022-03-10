@@ -1,42 +1,41 @@
 package com.example.springitems.controller;
 
 import com.example.springitems.entity.Company;
-import com.example.springitems.repository.CompanyRepository;
-import com.example.springitems.repository.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.springitems.service.CompanyService;
+import com.example.springitems.service.EmployeeService;
+import com.example.springitems.service.PictureService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class CompanyController {
 
-    @Autowired
-    private CompanyRepository companyRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    private final CompanyService companyService;
+    private final EmployeeService employeeService;
 
     @GetMapping("/companies")
     public String getAllCompanies(ModelMap map) {
-        List<Company> companies = companyRepository.findAll();
-        map.addAttribute("companies", companies);
+        map.addAttribute("companies", companyService.findAll());
         return "companies";
     }
 
 
     @PostMapping("/addCompany")
     public String addCompany(@ModelAttribute Company company) {
-        companyRepository.save(company);
+        companyService.save(company);
         return "redirect:/companies";
     }
 
-    //jnje che sik che, era or qce exception Hov jan debug e drac run ynchi kudas xelq chi mnace
     @GetMapping("/deleteCompany/{id}")
-    public String deleteCompany(@PathVariable int id) {
-        employeeRepository.deleteEmployeesByCompany_Id(id);
-        companyRepository.deleteById(id);
+    public String deleteCompany(@PathVariable("id") int id) {
+        employeeService.deleteEmployeesByCompany_Id(id);
+        companyService.deleteById(id);
 
         return "redirect:/companies";
     }
